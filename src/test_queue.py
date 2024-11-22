@@ -29,6 +29,17 @@ class TestQueue(unittest.TestCase):
         self.assertEqual(q2.get_waiting_count("p1"), 2)
         # check v5 in p2 queue
         self.assertEqual(q2["p2"].get_queue(), deque([v5]))
+
+    def test_get_all_waiting(self):
+        import time, datetime
+        q3 = queue.Queue()
+        v7 = visitor.Visitor()
+        time.sleep(0.5)
+        v8 = visitor.Visitor()
+        q3.add_visitor(v7)
+        q3.add_visitor(v8)
+        for v in q3.get_all_waiting():
+            self.assertIsInstance(v[1], datetime.timedelta)
         
 
 if __name__ == "__main__":

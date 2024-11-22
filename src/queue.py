@@ -3,7 +3,8 @@ import visitor
 class Queue:
     # Manages visitors as defined in visitor.py
 
-    # __init__
+    # transforms
+    ## __init__
     def __init__(
             self, 
             inner: bool = False, # defines whether we are inside of a purpose Queue or in the outer queue
@@ -22,9 +23,13 @@ class Queue:
 
         return None
 
-    # __getitem__ (this is self["purpose1"] implementation)
+    ## __getitem__ (this is self["purpose1"] implementation)
     def __getitem__(self, key):
         return self.__purpose_queues[key]
+
+    ## __repr__
+    def __repr__(self):
+        return f"Queue() of {self.get_waiting_count()} visitors."
 
     # methods
     ## get methods
@@ -71,7 +76,7 @@ class Queue:
     ### return a list of all waiting visitors with waiting times
     def get_all_waiting(self) -> list:
         from datetime import datetime
-        result = [(v, v.get_datetime() - datetime.now) for v in self.get_queue()]
+        result = [(v, datetime.now() - v.get_datetime()) for v in self.get_queue()]
         return result
 
     ## add methods
