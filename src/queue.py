@@ -1,4 +1,5 @@
-import visitor
+import visitor, json
+from collections import deque
 
 class Queue:
     # Manages visitors as defined in visitor.py
@@ -11,7 +12,6 @@ class Queue:
             purposes: list = []
             ) -> None:
         # queue attribute: list of visitors
-        from collections import deque
         self.__queue = deque()
         self.__inner = inner
         
@@ -80,11 +80,30 @@ class Queue:
         return result
 
     ## add methods
+    ### replace queue
+    ### NOTE that this FULLY replaces the queue with a new list of visitors. Do not call this lightly!
+    def replace_queue(self, rep: list) -> None:
+        self.__queue = deque(rep) # fully replace queue
+        # replace purpose queues next:
+        self.__purpose_queues = dict() # set up empty dict
+        for v in rep: # iterate over all visitors in replacement list
+            p = v.get_purpose() # store purpose
+            if p is not None: # in case it has a purpose
+                try:
+                    self.add_purpose_queue(p) # add purpose queue
+                except ValueError:
+                    print(f"W: Purpose {p} already in queue.") # warning message, might toss out
+                finally:
+                    self[p].add_visitor(v)
+                    
+        return None
+
+
     ### add queue to purpose_queues dict attribute
-    def add_queue(self, purpose: str) -> None:
+    def add_purpose_queue(self, purpose: str) -> None:
         # check for duplicate purpose
         if purpose in self.get_purposes():
-            raise ValueError(f"Queue.add_queue({purpose}): Purpose already in queue.")
+            raise ValueError(f"Queue.add_purpose_queue({purpose}): Purpose already in queue.")
         else:
             self.__purpose_queues[purpose] = Queue(True)
         # return
@@ -102,7 +121,7 @@ class Queue:
             if purpose in self.get_purposes():
                 self[purpose].add_visitor(visitor)
             else: 
-                self.add_queue(purpose)
+                self.add_purpose_queue(purpose)
                 self[purpose].add_visitor(visitor)   
 
         # return
@@ -127,6 +146,23 @@ class Queue:
                 raise KeyError(f"Queue.remove_visitor(): Purpose '{purpose}' not part of queue but on visitor.")
 
         return None
+
+    
+    # JSON import and export
+    ## export
+    def save_to_json(self, path = "../database/queue.json"):
+        with open(path, 'w') as f:
+            json.dump([visitor.to_dict() for visitor in self.get_queue()], f)
+
+    ## import
+    def load_from_json(self, path = "../database/queue.json"):
+        try:
+            with open(path, 'r') as f:
+                self.replace_queue([Visitor.from_data(data) for data in json.load(f)])
+        except FileNotFoundError:
+            self.replace_queue([])
+
+            
 
 
 def main():

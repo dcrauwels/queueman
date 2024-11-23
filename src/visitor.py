@@ -1,3 +1,5 @@
+import time
+
 class Visitor:
     # track number of overall visitors
     visitor_count = 0
@@ -8,25 +10,27 @@ class Visitor:
             self,
             purpose: str = None,
             name: str = None,
+            number: int = 0
+            timestamp = time.time()
+            desk: int = 0
+            status: int = 0
             ):
-        ## imports
-        import time
         ## self-referring
         self.__purpose = purpose
         self.__name = name
         ## default inits
-        self.__desk = 0
-        self.__status = self.visitor_statuses[0] # always inits to "waiting"
+        self.__desk = desk
+        self.__status = self.visitor_statuses[status] # always inits to "waiting"
         Visitor.visitor_count += 1
-        self.__id = Visitor.visitor_count # how many visitors since start of run
-        self.__timestamp = time.time() # when did the visitor get in queue
+        self.__number = Visitor.visitor_count if number == 0 else number
+        self.__timestamp = timestamp # when did the visitor get in queue
         self.__time_served = 0 # when did the visitor get called
 
     # get methods
     def get_status(self) -> str:
         return self.__status
-    def get_count(self) -> int:
-        return self.__id
+    def get_number(self) -> int:
+        return self.__number
     def get_purpose(self) -> str:
         return self.__purpose
     def get_timestamp(self):
@@ -38,6 +42,8 @@ class Visitor:
         return self.__desk
     def get_time_served(self) -> float:
         return float(self.__time_served)
+    def get_name(self) -> str:
+        return self.__name
     
     # assign desk method
     def call_visitor(self, operator) -> None:
@@ -50,6 +56,29 @@ class Visitor:
         if status < 0 or status > 2:
             raise ValueError("Status must be between 0 and 2.")
         self.__status = self.visitor_statuses[status]
+
+    # export to dict
+    def to_dict(self):
+        return {
+                "purpose": self.get_purpose(),
+                "name": self.get_name(),
+                "number": self.get_number(),
+                "timestamp": self.get_timestamp(),
+                "desk": self.get_desk()
+                "status": self.get_status()
+                }
+
+    # import from dict
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+                data["purpose"],
+                data["name"],
+                data["number"],
+                data["timestamp"],
+                data["desk"],
+                data["status"]
+                )
 
 def main():
     pass
