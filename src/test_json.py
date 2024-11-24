@@ -17,15 +17,23 @@ class TestJSON(unittest.TestCase):
 
         self.assertEqual(q1.get_visitor().get_number(), q2.get_visitor().get_number())
 
-    def est_save(self): # NYI
+    def test_save(self): # NYI
         q3 = queue.Queue()
         v4 = visitor.Visitor()
         v5 = visitor.Visitor()
         for v in [v4, v5]:
             q3.add_visitor(v)
         
+        import json
+
         fp = "database/queue.json"
         q3.save_to_json(fp)
+
+        with open(fp, 'r') as f:
+            s = f.read()
+        l = eval(s.replace("null", "None"))
+
+        self.assertEqual(l[0]["number"], v4.get_number())
 
 if __name__ == "__main__":
     unittest.main()

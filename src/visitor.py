@@ -28,10 +28,7 @@ class Visitor:
 
     # __repr__
     def __repr__(self):
-        print("Visitor with the following attributes:")
-        #for k, v in vars(self):
-        #    print(f"{k:9>}: {v}")
-        print(vars(self))
+        return f"ID: {self.get_number()}; Name: {self.get_number()}; Purpose: {self.get_purpose()}; Time: {self.get_datetime()}"
 
     # get methods
     def get_status(self) -> str:
