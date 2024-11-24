@@ -1,4 +1,5 @@
-import visitor, json
+import json
+from visitor import Visitor
 from collections import deque
 
 class Queue:
@@ -148,17 +149,17 @@ class Queue:
         return None
 
     
-    # JSON import and export
-    ## export
-    def save_to_json(self, path = "../database/queue.json"):
+    ## JSON import and export
+    ### export
+    def save_to_json(self, path = "database/queue.json"):
         with open(path, 'w') as f:
             json.dump([visitor.to_dict() for visitor in self.get_queue()], f)
 
-    ## import
-    def load_from_json(self, path = "../database/queue.json"):
+    ### import
+    def load_from_json(self, path = "database/queue.json"):
         try:
             with open(path, 'r') as f:
-                self.replace_queue([Visitor.from_data(data) for data in json.load(f)])
+                self.replace_queue([Visitor.from_dict(data) for data in json.load(f)])
         except FileNotFoundError:
             self.replace_queue([])
 

@@ -10,10 +10,10 @@ class Visitor:
             self,
             purpose: str = None,
             name: str = None,
-            number: int = 0
-            timestamp = time.time()
-            desk: int = 0
-            status: int = 0
+            number: int = 0,
+            timestamp = 0,
+            desk: int = 0,
+            status: int = 0,
             ):
         ## self-referring
         self.__purpose = purpose
@@ -23,8 +23,15 @@ class Visitor:
         self.__status = self.visitor_statuses[status] # always inits to "waiting"
         Visitor.visitor_count += 1
         self.__number = Visitor.visitor_count if number == 0 else number
-        self.__timestamp = timestamp # when did the visitor get in queue
+        self.__timestamp = time.time() if timestamp == 0 else timestamp # when did the visitor get in queue
         self.__time_served = 0 # when did the visitor get called
+
+    # __repr__
+    def __repr__(self):
+        print("Visitor with the following attributes:")
+        #for k, v in vars(self):
+        #    print(f"{k:9>}: {v}")
+        print(vars(self))
 
     # get methods
     def get_status(self) -> str:
@@ -64,8 +71,8 @@ class Visitor:
                 "name": self.get_name(),
                 "number": self.get_number(),
                 "timestamp": self.get_timestamp(),
-                "desk": self.get_desk()
-                "status": self.get_status()
+                "desk": self.get_desk(),
+                "status": self.visitor_statuses.index(self.get_status())
                 }
 
     # import from dict
