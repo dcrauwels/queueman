@@ -1,7 +1,7 @@
-import time
+import time, uuid
 
 class Visitor:
-    # track number of overall visitors
+    # track count of overall visitors
     visitor_count = 0
     visitor_statuses = ["waiting", "called", "served"]
 
@@ -10,7 +10,7 @@ class Visitor:
             self,
             purpose: str = None,
             name: str = None,
-            number: int = 0,
+            number: str = 'a',
             timestamp = 0,
             desk: int = 0,
             status: int = 0,
@@ -22,13 +22,13 @@ class Visitor:
         self.__desk = desk
         self.__status = self.visitor_statuses[status] # always inits to "waiting"
         Visitor.visitor_count += 1
-        self.__number = Visitor.visitor_count if number == 0 else number
+        self.__number = number if number != 'a' else str(uuid.uuid4())
         self.__timestamp = time.time() if timestamp == 0 else timestamp # when did the visitor get in queue
         self.__time_served = 0 # when did the visitor get called
 
     # __repr__
     def __repr__(self):
-        return f"ID: {self.get_number()}; Name: {self.get_number()}; Purpose: {self.get_purpose()}; Time: {self.get_datetime()}"
+        return f"ID: {self.get_number()}; Name: {self.get_name()}; Purpose: {self.get_purpose()}; Time: {self.get_datetime()}"
 
     # get methods
     def get_status(self) -> str:

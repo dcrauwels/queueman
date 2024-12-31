@@ -15,19 +15,20 @@ def main():
 
     # Add
     add_parser = subparsers.add_parser("add", help = "Add a new visitor to the queue.")
-    add_parser.add_argument("name", help = "Set visitor name. Optional.", default = None)
-    add_parser.add_argument("purpose", help = "Set visitor purpose. Optional.", default = None)
+    add_parser.add_argument("--name", help = "Set visitor name. Optional.", nargs = '?', const = None, type = str)
+    add_parser.add_argument("--purpose", help = "Set visitor purpose. Optional.", nargs = '?', const = None, type = str)
 
     # Call
     call_parser = subparsers.add_parser("call", help = "Call a visitor from the queue.")
-    call_parser.add_argument("purpose", help = "Priority call from a specific purpose queue. Optional.", default = None)
+    call_parser.add_argument("--purpose", help = "Priority call from a specific purpose queue. Optional.", nargs = '?', const = None, type = str)
 
     # View queue
     view_parser = subparsers.add_parser("view", help = "View the queue status.")
-    view_parser.add_argument("purpose", help = "View queue for a specific purpose. Optional.", default = None)
+    view_parser.add_argument("--purpose", help = "View queue for a specific purpose. Optional.", nargs = '?', const = None, type = str)
 
     # actual argument parsing
     args = parser.parse_args()
+    print(args)
 
     if args.command == "add":
         q.add_visitor(Visitor(args.purpose, args.name, len(q.get_queue()) + 1))
