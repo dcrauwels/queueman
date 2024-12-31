@@ -2,15 +2,15 @@ import time, uuid
 
 class Visitor:
     # track count of overall visitors
-    visitor_count = 0
-    visitor_statuses = ["waiting", "called", "served"]
+    visitor_count = 0 # currently does nothing
+    visitor_statuses = ["waiting", "called", "served"] # store possible visitor statuses
 
     # __init__ 
     def __init__(
             self,
             purpose: str = None,
             name: str = None,
-            number: str = 'a',
+            number: str = '.',
             timestamp = 0,
             desk: int = 0,
             status: int = 0,
@@ -21,8 +21,8 @@ class Visitor:
         ## default inits
         self.__desk = desk
         self.__status = self.visitor_statuses[status] # always inits to "waiting"
-        Visitor.visitor_count += 1
-        self.__number = number if number != 'a' else str(uuid.uuid4())
+        Visitor.visitor_count += 1 # think this whole approach is superfluous
+        self.__number = str(uuid.uuid4()) if number == '.' else number # uuid as string if no number parameter is given
         self.__timestamp = time.time() if timestamp == 0 else timestamp # when did the visitor get in queue
         self.__time_served = 0 # when did the visitor get called
 
@@ -33,7 +33,7 @@ class Visitor:
     # get methods
     def get_status(self) -> str:
         return self.__status
-    def get_number(self) -> int:
+    def get_number(self) -> str:
         return self.__number
     def get_purpose(self) -> str:
         return self.__purpose

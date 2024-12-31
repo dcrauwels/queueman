@@ -31,7 +31,7 @@ def main():
     print(args)
 
     if args.command == "add":
-        q.add_visitor(Visitor(args.purpose, args.name, len(q.get_queue()) + 1))
+        q.add_visitor(Visitor(args.purpose, args.name))
     elif args.command == "call":
         try:
             v = q.get_visitor(args.purpose)

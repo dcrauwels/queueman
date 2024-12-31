@@ -161,9 +161,9 @@ class Queue:
             with open(path, 'r') as f:
                 self.replace_queue([Visitor.from_dict(data) for data in json.load(f)])
         except FileNotFoundError:
+            print("W: No existing database file found. Initializing empty queue.")
             self.replace_queue([])
 
-            
 
 
 def main():
