@@ -1,32 +1,42 @@
-import visitor, queue
+import json
+from visitor import Visitor
+from queue import Queue
 
 class Operator:
     # describes a user calling visitors and tracking their state
+
+    statuses = ["Offline", "Ready", "Working"]
+
     def __init__(
             self,
-            queue = None,
-            current_visitor = None
-            purpose = None
+            name: str = "Operator",
+            desk: int = None, # currently an int for the visitor class as well
+            status: int = 0,
             ):
-        self.__queue = queue
-        self.__current_visitor = current_visitor
-        self.__purpose = purpose
+        self.__name = name
+        self.__desk = desk
+        self.__status = statuses[status]
 
-    def call_next(visitor_order = True):
+    def set_status(self, status:int = 0):
+        self.__status = statuses[status]
+
+    def call_next(queue, purpose: str = None, position: int = 0, visitor: Visitor = None):
         # calls next visitor in the queue (status 1)
-        pass
+        
+        # serve previous visitor if one is present
+        if visitor is not None:
+            self.serve_visitor(visitor)
 
-    def serve_visitor(visitor):
+        # get new visitor and set status to called (1)
+        visitor = queue.get_visitor(purpose, position)
+        visitor.set_status(1)
+
+        # set own status to working (2)
+        self.set_status(2)
+        
+
+    def serve_visitor(self, visitor):
         # mark visitor as served (status 2) and remove them from queue
-        pass
-
-    def get_waiting_visitors(purpose = None):
-        # returns a list of waiting visitors
-        pass
-    
-    def change_queue_order(purpose = None):
-        pass
-
-
-
+        visitor.set_status(2)
+        self.set_status(1)
 
