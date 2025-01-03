@@ -6,7 +6,6 @@ def main():
     from queue import Queue
     q = Queue()
     q.load_from_json()
-    print(q)
 
     parser = argparse.ArgumentParser(
             prog = "Queue Manager CLI",
@@ -39,7 +38,7 @@ def main():
 
     # actual argument parsing
     args = parser.parse_args()
-    print(args)
+    print(args) # NOTE this is debugging purposes for now
 
     if args.command == "add":
         q.add_visitor(Visitor(args.purpose, args.name))

@@ -149,17 +149,13 @@ class Queue(deque):
     def load_from_json(self, name: str = None, path:str = "") -> None:
         if path == "":
             path = f"database/{self.get_name()}_queue.json"
-            print(path)
         try:
             with open(path, 'r') as f:
                 data = json.load(f)
-                #print(data)
-                #print([Visitor.from_dict(v) for v in data["contents"]])
                 self.replace_queue(
                         name = data["name"],
                         rep = [Visitor.from_dict(v) for v in data["contents"]]
                         )
-                print(self)
         except FileNotFoundError:
             print("W: No existing database file found. Initializing empty queue.")
             self.replace_queue()
