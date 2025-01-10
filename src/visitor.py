@@ -1,5 +1,7 @@
 import time, uuid
+from functools import total_ordering
 
+@total_ordering #saves time on the cmp() implementation
 class Visitor:
     # track count of overall visitors
     visitor_count = 0 # currently does nothing
@@ -29,6 +31,12 @@ class Visitor:
     # __repr__
     def __repr__(self):
         return f"ID: {self.get_number()}; Name: {self.get_name()}; Purpose: {self.get_purpose()}; Time: {self.get_datetime()}"
+
+    # __cmp__
+    def __eq__(self, other):
+        return self.get_timestamp() == other.get_timestamp()
+    def __lt__(self, other):
+        return self.get_timestamp() < other.get_timestamp()
 
     # get methods
     def get_status(self) -> str:
